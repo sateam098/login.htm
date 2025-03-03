@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOVE TANG🤎🐖</title>
+    <style>
+        /* CSS Styles */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: pink; /* สีชมพู */
+            overflow: hidden; /* ป้องกันการเลื่อนหน้าจอ */
+        }
+
+        .wrapper {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background-color: pink; /* สีชมพู */
+        }
+
+        .inner {
+            --w: 100px;
+            --h: 150px;
+            --translateZ: calc((var(--w) + var(--h)) + 0px);
+            --rotateX: -15deg;
+            --perspective: 1000px;
+            position: absolute;
+            width: var(--w);
+            height: var(--h);
+            top: 25%;
+            left: calc(50% - (var(--w) / 2) - 2.5px);
+            z-index: 2;
+            transform-style: preserve-3d;
+            transform: perspective(var(--perspective));
+            animation: rotating 20s linear infinite;
+        }
+
+        @keyframes rotating {
+            from {
+                transform: perspective(var(--perspective)) rotateX(var(--rotateX)) rotateY(0);
+            }
+            to {
+                transform: perspective(var(--perspective)) rotateX(var(--rotateX)) rotateY(1turn);
+            }
+        }
+
+        .inner.paused {
+            animation-play-state: paused;
+        }
+
+        .card {
+            position: absolute;
+            border: 2px solid rgba(var(--color-card));
+            border-radius: 12px;
+            overflow: hidden;
+            inset: 0;
+            transform: rotateY(calc((360deg / var(--quantity)) * var(--index))) translateZ(var(--translateZ));
+            transition: transform 0.5s ease-in-out, scale 0.5s ease-in-out;
+        }
+
+        .card:hover {
+            transform: rotateY(calc((360deg / var(--quantity)) * var(--index))) translateZ(calc(var(--translateZ) * 1.5)) scale(1.2);
+            z-index: 3; /* ให้รูปที่ขยายอยู่ด้านบน */
+        }
+
+        .img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            background-image: var(--img-url);
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* CSS สำหรับหัวใจตก */
+        .heart {
+            position: absolute;
+            top: -10%;
+            z-index: 1;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="inner" style="--quantity: 10;">
+            <div class="card" style="--index: 0; --color-card: 142, 249, 252; --img-url: url('รูป/TANG.jpg');">
+                <div class="img"></div>
+            </div>
+            <div class="card" style="--index: 1; --color-card: 142, 252, 204; --img-url: url('รูป/TEAM.jpg');">
+                <div class="img"></div>
+            </div>
+            <div class="card" style="--index: 2; --color-card: 142, 252, 157; --img-url: url('รูป/2กินย่างเนย.jpg');">
+                <div class="img"></div>
+            </div>
+            <div class="card" style="--index: 3; --color-card: 215, 252, 142; --img-url: url('รูป/TANGกินข้าว.jpg');">
+                <div class="img"></div>
+            </div>
+            <div class="card" style="--index: 4; --color-card: 252, 252, 142; --img-url: url('รูป/ขี่รถ.jpg');">
+                <div class="img"></div>
+            </div>
+            <div class="card" style="--index: 5; --color-card: 252, 208, 142; --img-url: url('รูป/ถ่ายหัว.jpg');">
+                <div class="img"></div>
+            </div>
+            <div class="card" style="--index: 6; --color-card: 252, 142, 142; --img-url: url('รูป/ยิงปืน.jpg');">
+                <div class="img"></div>
+            </div>
+            <div class="card" style="--index: 7; --color-card: 252, 142, 239; --img-url: url('รูป/หัวใจ.jpg');">
+                <div class="img"></div>
+            </div>
+            <div class="card" style="--index: 8; --color-card: 204, 142, 252; --img-url: url('รูป/ถ่ายหัว2.jpg');">
+                <div class="img"></div>
+            </div>
+            <div class="card" style="--index: 9; --color-card: 142, 202, 252; --img-url: url('รูป/2นิ้ว.jpg');">
+                <div class="img"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const inner = document.querySelector('.inner');
+        const cards = document.querySelectorAll('.card');
+        const quantity = parseInt(inner.style.getPropertyValue('--quantity')); // จำนวนรูป
+        const angle = 360 / quantity; // มุมระหว่างรูปแต่ละรูป
+
+        let isPaused = false;
+        let currentRotation = 0;
+
+        // ฟังก์ชันคำนวณมุมการหมุน
+        function calculateRotation() {
+            const computedStyle = window.getComputedStyle(inner);
+            const matrix = computedStyle.transform;
+            if (matrix === 'none') return 0;
+
+            const values = matrix.split('(')[1].split(')')[0].split(',');
+            const a = values[0];
+            const b = values[1];
+            const angleRad = Math.atan2(b, a);
+            let angleDeg = (angleRad * 180) / Math.PI;
+            if (angleDeg < 0) angleDeg += 360;
+
+            return angleDeg;
+        }
+
+        // หยุดหมุนและปรับตำแหน่งรูปให้มาอยู่ตรงกลาง
+        inner.addEventListener('mouseenter', () => {
+            isPaused = true;
+            inner.classList.add('paused');
+
+            // คำนวณมุมการหมุนปัจจุบัน
+            currentRotation = calculateRotation();
+
+            // หารูปที่อยู่ใกล้กับตำแหน่งตรงกลางที่สุด
+            const closestIndex = Math.round((currentRotation % 360) / angle);
+            const targetRotation = closestIndex * angle;
+
+            // ปรับการหมุนให้รูปที่เลือกมาอยู่ตรงกลาง
+            inner.style.transform = `perspective(1000px) rotateX(-15deg) rotateY(${targetRotation}deg)`;
+        });
+
+        // เริ่มหมุนต่อเมื่อนำเมาส์ออก
+        inner.addEventListener('mouseleave', () => {
+            isPaused = false;
+            inner.classList.remove('paused');
+            inner.style.transform = `perspective(1000px) rotateX(-15deg) rotateY(${currentRotation}deg)`;
+            inner.style.animationPlayState = 'running';
+        });
+
+        // ฟังก์ชันสร้างหัวใจตกแบบสุ่ม
+        function createHeart() {
+            const heart = document.createElement("div");
+            heart.classList.add("heart");
+            heart.innerHTML = "💖"; // ใช้ Emoji รูปหัวใจสีชมพู
+            document.body.appendChild(heart);
+
+            // กำหนดตำแหน่งและขนาดแบบสุ่ม
+            heart.style.left = Math.random() * 100 + "vw"; // ตำแหน่งแนวนอนแบบสุ่ม
+            heart.style.fontSize = Math.random() * 20 + 10 + "px"; // ขนาด 10px - 30px
+            heart.style.animationDuration = Math.random() * 3 + 2 + "s"; // ความเร็ว 2s - 5s
+
+            setTimeout(() => {
+                heart.remove(); // ลบหัวใจหลังจากตกถึงพื้น
+            }, 5000);
+        }
+
+        // สร้างหัวใจทุก 300 มิลลิวินาที
+        setInterval(createHeart, 300);
+    </script>
+</body>
+</html>

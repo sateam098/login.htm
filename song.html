@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Give Me Your Forever</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffe6f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #ff1493;
+        }
+
+        img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border: 5px solid #ff66b2;
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        audio {
+            margin-top: 10px;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #ff66b2;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #ff3385;
+        }
+
+        .gift {
+            position: absolute;
+            font-size: 30px;
+            animation: fall 4s linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                top: -50px;
+            }
+            100% {
+                top: 100vh;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Pondering - เพลงนี้ผมเขียนให้เธอ🎶</h1>
+        <img src="รูป/LINE_ALBUM_21268_250303_1.jpg" alt="Music Cover">
+        <br>
+        <audio id="audioPlayer" controls>
+            <source src="เพลง/song.mp3" type="audio/mpeg">
+            เบราว์เซอร์ของคุณไม่รองรับการเล่นเพลง
+        </audio>
+        <br>
+        <button onclick="playAudio()">▶ เล่นเพลง</button>
+        <button onclick="pauseAudio()">⏸ หยุดเพลง</button>
+    </div>
+
+    <script>
+        const audioPlayer = document.getElementById('audioPlayer');
+
+        function playAudio() {
+            audioPlayer.play();
+        }
+
+        function pauseAudio() {
+            audioPlayer.pause();
+        }
+
+        function createGift() {
+            const gift = document.createElement("div");
+            gift.classList.add("gift");
+            gift.innerHTML = "🎁";
+            document.body.appendChild(gift);
+            gift.style.left = Math.random() * 100 + "vw";
+            setTimeout(() => {
+                gift.remove();
+            }, 4000);
+        }
+
+        setInterval(createGift, 300);
+    </script>
+</body>
+
+</html>
