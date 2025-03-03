@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HAPPY BIRTHDAY TANG🤎🐖</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <h2>HAPPY BIRTHDAY TANG🤎🐖</h2>
+        <div class="content">
+            <img id="coupleImage" src="รูป/TEAM.jpg" alt="Couple Photo">
+            <div class="controls">
+                <h6>วันเกิดตัง</h6> <br>
+                <input type="text" id="numberInput" value="__/__/__" placeholder="Enter number">
+                <div class="grid">
+                    <button onclick="addNumber('0')">0</button>
+                    <button onclick="addNumber('1')">1</button>
+                    <button onclick="addNumber('2')">2</button>
+                    <button onclick="addNumber('3')">3</button>
+                    <button onclick="addNumber('4')">4</button>
+                    <button onclick="addNumber('5')">5</button>
+                    <button onclick="addNumber('6')">6</button>
+                    <button onclick="addNumber('7')">7</button>
+                    <button onclick="addNumber('8')">8</button>
+                    <button onclick="addNumber('9')">9</button>
+                </div>
+                <button id="nextPageButton" style="display:none;" onclick="goToNextPage()">หน้าต่อไป</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let realPassword = "";
+        const correctPassword = "12/03/68";
+
+        function addNumber(char) {
+            let inputField = document.getElementById('numberInput');
+            if (realPassword.length < 8) {
+                realPassword += char;
+                
+                if (realPassword.length === 2 || realPassword.length === 5) {
+                    realPassword += "/";
+                }
+                
+                inputField.value = realPassword;
+                if (realPassword.length === 8) {
+                    checkPassword();
+                }
+            }
+        }
+
+        function checkPassword() {
+            if (realPassword === correctPassword) {
+                document.getElementById('coupleImage').src = "รูป/TANG.jpg";
+                document.getElementById('nextPageButton').style.display = "block";
+            } else {
+                alert("รหัสผิด กรุณาลองอีกครั้ง!");
+                clearInput();
+            }
+        }
+
+        function clearInput() {
+            realPassword = "";
+            document.getElementById('numberInput').value = "__/__/__";
+            document.getElementById('coupleImage').src = "รูป/TEAM.jpg";
+            document.getElementById('nextPageButton').style.display = "none";
+        }
+
+        function goToNextPage() {
+            window.location.href = "index.html";
+        }
+
+        function createCake() {
+            const cake = document.createElement("div");
+            cake.classList.add("heart");
+            cake.innerHTML = "🎂";  <!-- Changed from 💖 to 🎂 -->
+            document.body.appendChild(cake);
+
+            cake.style.left = Math.random() * 100 + "vw";
+            cake.style.fontSize = Math.random() * 20 + 10 + "px";
+            cake.style.animationDuration = Math.random() * 3 + 2 + "s";
+
+            setTimeout(() => {
+                cake.remove();
+            }, 5000);
+        }
+
+        setInterval(createCake, 300);
+    </script>
+</body>
+ 
+</html>
